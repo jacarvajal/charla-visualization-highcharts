@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Implements hook_
+ */
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function visualization_jacarvajal_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/' . $plugin;
+  }
+}
