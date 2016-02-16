@@ -1,0 +1,55 @@
+diff --git a/sites/all/modules/contrib/visualization/includes/plugins/highcharts.inc b/sites/all/modules/contrib/visualization/includes/plugins/highcharts.inc
+index ca5e70a..0a5a274 100644
+--- a/sites/all/modules/contrib/visualization/includes/plugins/highcharts.inc
++++ b/sites/all/modules/contrib/visualization/includes/plugins/highcharts.inc
+@@ -67,13 +67,25 @@ class HighchartsHandler implements VisualizationHandlerInterface {
+         $serie = new stdClass();
+         $serie->name = $column['label'];
+         $serie->type = $options['type'];
++        // Allow show pie charts as donut charts
++        if (!empty($options['innerSize'])) {
++          $serie->innerSize = $options['innerSize'];
++        }
++        // End hack
+ 
+         $serie->data = array();
+         foreach ($data as $row) {
+           $value = (int) $row[$name];
+ 
+           if (!empty($column['enabled'])) {
+-            $serie->data[] = (object) array('name' => (string) html_entity_decode($row[$options['xAxis']['labelField']], ENT_QUOTES), 'y' => $value);
++            // Allow different fields colors
++            if(!empty($row['color'])) {
++              $serie->data[] = (object) array('name' => (string) html_entity_decode($row[$options['xAxis']['labelField']], ENT_QUOTES), 'y' => $value, 'color' => $row['color']);
++            }
++            else {
++              $serie->data[] = (object) array('name' => (string) html_entity_decode($row[$options['xAxis']['labelField']], ENT_QUOTES), 'y' => $value);
++            }
++            // End hack
+           }
+           else {
+             $serie->data[] = $value;
+@@ -93,12 +105,23 @@ class HighchartsHandler implements VisualizationHandlerInterface {
+       ),
+       'showInLegend' => TRUE,
+     );
++
++    // Allow label format customization in pie charts
++    if (!empty($options['dataLabelsFormat'])) {
++      $highchart->plotOptions->pie->dataLabels->format = $options['dataLabelsFormat'];
++    }
++
+     $highchart->plotOptions->bar = (object) array(
+       'dataLabels' => (object) array(
+         'enabled' => TRUE,
+       ),
+     );
+ 
++    // Allow label format customization in bar charts
++    if (!empty($options['dataLabelsFormat'])) {
++      $highchart->plotOptions->bar->dataLabels->format = $options['dataLabelsFormat'];
++    }
++
+     $highchart->credits = new stdClass();
+     $highchart->credits->enabled = FALSE;
+ 
