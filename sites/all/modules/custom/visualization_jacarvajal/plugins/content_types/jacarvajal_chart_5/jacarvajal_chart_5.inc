@@ -74,6 +74,7 @@ function _jacarvajal_chart5_content() {
       'type' => 'pie',
       'data' => $data,
       'dataLabelsFormat' => '{point.percentage:.1f}%',
+      'innerSize' => '45%',
       'title' => t('Content - Percent by content type'),
       'fields' => [
         'count' => [

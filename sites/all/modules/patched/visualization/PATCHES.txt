@@ -1,0 +1,4 @@
+PATCHES APPLIED
+---------------
+- Add new features to highcharts Drupal integration.
+  See: visualization_add-features-to-highcharts-integration.patch
